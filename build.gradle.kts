@@ -25,6 +25,14 @@ apply {
 }
 repositories {
     mavenCentral()
+    maven {
+        name = "Minecraft Libraries"
+        url = uri("https://libraries.minecraft.net/")
+    }
+    maven {
+        name = "NeoForged"
+        url = uri("https://maven.neoforged.net/releases")
+    }
 }
 
 // gradle.properties

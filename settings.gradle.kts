@@ -5,6 +5,11 @@ pluginManagement {
 				forRepository { maven(url) }
 				filter(filter)
 			}
+		maven("https://libraries.minecraft.net/") {
+			content {
+				includeGroup("com.mojang")
+			}
+		}
 		maven("https://maven.minecraftforge.net") {
 			content {
 				includeGroupByRegex("net\\.minecraftforge.*")
@@ -50,7 +55,8 @@ include(
 	"Changelog",
 	"Common", "CommonApi",
 	"NeoForge", "NeoForgeApi",
-	"Forge", "ForgeApi",
+	// Forge no longer supports 1.21.2+, using NeoForge instead
+	// "Forge", "ForgeApi",
 	"Fabric", "FabricApi",
 	"Library",
 	"Gui"
