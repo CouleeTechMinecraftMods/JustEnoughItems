@@ -73,6 +73,18 @@ spotless {
 }
 
 subprojects {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "Minecraft Libraries"
+            url = uri("https://libraries.minecraft.net/")
+        }
+        maven {
+            name = "NeoForged"
+            url = uri("https://maven.neoforged.net/releases")
+        }
+    }
+
     //adds the build number to the end of the version string if on a build server
     var buildNumber = project.findProperty("BUILD_NUMBER")
     if (buildNumber == null) {
