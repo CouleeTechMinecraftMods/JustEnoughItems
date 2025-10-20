@@ -57,7 +57,8 @@ include(
 	"NeoForge", "NeoForgeApi",
 	// Forge no longer supports 1.21.2+, using NeoForge instead
 	// "Forge", "ForgeApi",
-	"Fabric", "FabricApi",
+	// Fabric dropped in upstream 1.21.4, focusing on NeoForge
+	// "Fabric", "FabricApi",
 	"Library",
 	"Gui"
 )

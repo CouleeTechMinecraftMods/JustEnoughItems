@@ -91,9 +91,41 @@ public final class RecipeTypes {
 	 * JEI automatically creates a fuel recipe for anything that has a burn time.
 	 *
 	 * @since 9.5.0
+	 * @deprecated Use {@link #SMELTING_FUEL}, {@link #BLASTING_FUEL}, or {@link #SMOKING_FUEL} instead
 	 */
+	@Deprecated(since = "19.28.0", forRemoval = true)
 	public static final RecipeType<IJeiFuelingRecipe> FUELING =
 		RecipeType.create(ModIds.MINECRAFT_ID, "fuel", IJeiFuelingRecipe.class);
+
+	/**
+	 * The furnace fuel recipe type.
+	 *
+	 * JEI automatically creates a fuel recipe for anything that has a burn time in a furnace.
+	 *
+	 * @since 19.28.0
+	 */
+	public static final RecipeType<IJeiFuelingRecipe> SMELTING_FUEL =
+		RecipeType.create(ModIds.MINECRAFT_ID, "smelting_fuel", IJeiFuelingRecipe.class);
+
+	/**
+	 * The blast furnace fuel recipe type.
+	 *
+	 * JEI automatically creates a fuel recipe for anything that has a burn time in a blast furnace.
+	 *
+	 * @since 19.28.0
+	 */
+	public static final RecipeType<IJeiFuelingRecipe> BLASTING_FUEL =
+		RecipeType.create(ModIds.MINECRAFT_ID, "blasting_fuel", IJeiFuelingRecipe.class);
+
+	/**
+	 * The smoker fuel recipe type.
+	 *
+	 * JEI automatically creates a fuel recipe for anything that has a burn time in a smoker.
+	 *
+	 * @since 19.28.0
+	 */
+	public static final RecipeType<IJeiFuelingRecipe> SMOKING_FUEL =
+		RecipeType.create(ModIds.MINECRAFT_ID, "smoking_fuel", IJeiFuelingRecipe.class);
 
 	/**
 	 * The brewing recipe type.

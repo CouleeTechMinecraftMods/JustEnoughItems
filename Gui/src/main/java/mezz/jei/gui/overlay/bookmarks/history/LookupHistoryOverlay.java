@@ -27,7 +27,6 @@ import mezz.jei.gui.overlay.IngredientGrid;
 import mezz.jei.gui.overlay.elements.IElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
@@ -107,7 +106,7 @@ public class LookupHistoryOverlay implements IRecipeFocusSource {
 	private void drawLine(PoseStack poseStack, int x1, int x2, int y, int argbColor) {
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
-		RenderSystem.setShader(GameRenderer::getPositionColorShader);
+		// BufferUploader.drawWithShader handles setting the shader automatically
 		Tesselator tesselator = Tesselator.getInstance();
 		BufferBuilder builder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
 
