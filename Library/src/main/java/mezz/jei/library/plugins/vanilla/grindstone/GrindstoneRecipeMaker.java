@@ -56,9 +56,7 @@ public final class GrindstoneRecipeMaker {
 					continue;
 				}
 				Enchantment enchantment = enchantmentHolder.value();
-				if (!enchantment.isSupportedItem(stack) ||
-						!platformHelper.isItemEnchantable(stack, enchantmentHolder)
-				) {
+				if (!enchantment.isSupportedItem(stack)) {
 					continue;
 				}
 				Optional<ResourceKey<Enchantment>> enchantmentResourceLocation = registry.getResourceKey(enchantment);

@@ -93,8 +93,8 @@ public class NeoForgeLimitedQuadItemModel extends BakedModelWrapper<BakedModel> 
 	}
 
 	@Override
-	public List<BakedModel> getRenderPasses(ItemStack itemStack, boolean fabulous) {
-		List<BakedModel> renderPasses = super.getRenderPasses(itemStack, fabulous);
+	public List<BakedModel> getRenderPasses(ItemStack itemStack) {
+		List<BakedModel> renderPasses = super.getRenderPasses(itemStack);
 		List<BakedModel> result = new ArrayList<>(renderPasses.size());
 		for (BakedModel bakedModel : renderPasses) {
 			if (bakedModel == this.originalModel) {

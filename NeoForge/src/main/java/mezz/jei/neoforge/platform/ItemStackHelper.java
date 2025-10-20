@@ -2,9 +2,6 @@ package mezz.jei.neoforge.platform;
 
 import mezz.jei.common.platform.IPlatformItemStackHelper;
 import mezz.jei.common.util.ErrorUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;

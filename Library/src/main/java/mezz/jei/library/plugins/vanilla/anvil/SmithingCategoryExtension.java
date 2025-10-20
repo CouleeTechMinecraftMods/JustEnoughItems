@@ -20,27 +20,27 @@ public abstract class SmithingCategoryExtension<R extends SmithingRecipe> implem
 
 	@Override
 	public <T extends IIngredientAcceptor<T>> void setTemplate(R recipe, T ingredientAcceptor) {
-		Ingredient ingredient = recipeHelper.getTemplate(recipe);
-		ingredientAcceptor.addIngredients(ingredient);
+		recipeHelper.getTemplate(recipe)
+			.ifPresent(ingredientAcceptor::addIngredients);
 	}
 
 	@Override
 	public <T extends IIngredientAcceptor<T>> void setBase(R recipe, T ingredientAcceptor) {
-		Ingredient ingredient = recipeHelper.getBase(recipe);
-		ingredientAcceptor.addIngredients(ingredient);
+		recipeHelper.getBase(recipe)
+			.ifPresent(ingredientAcceptor::addIngredients);
 	}
 
 	@Override
 	public <T extends IIngredientAcceptor<T>> void setAddition(R recipe, T ingredientAcceptor) {
-		Ingredient ingredient = recipeHelper.getAddition(recipe);
-		ingredientAcceptor.addIngredients(ingredient);
+		recipeHelper.getAddition(recipe)
+			.ifPresent(ingredientAcceptor::addIngredients);
 	}
 
 	@Override
 	public <T extends IIngredientAcceptor<T>> void setOutput(R recipe, T ingredientAcceptor) {
-		Ingredient templateIngredient = recipeHelper.getTemplate(recipe);
-		Ingredient baseIngredient = recipeHelper.getBase(recipe);
-		Ingredient additionIngredient = recipeHelper.getAddition(recipe);
+		Ingredient templateIngredient = recipeHelper.getTemplate(recipe).orElse(Ingredient.of());
+		Ingredient baseIngredient = recipeHelper.getBase(recipe).orElse(Ingredient.of());
+		Ingredient additionIngredient = recipeHelper.getAddition(recipe).orElse(Ingredient.of());
 
 		// In 1.21.2+, Ingredient.items() returns HolderSet<Item> which needs to be mapped to ItemStacks
 		List<ItemStack> templateStacks = templateIngredient.items().stream()
