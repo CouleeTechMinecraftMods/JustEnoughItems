@@ -3,9 +3,9 @@ package mezz.jei.common.platform;
 import mezz.jei.common.util.ImmutableRect2i;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.AbstractRecipeBookScreen;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookTabButton;
-import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener;
 import net.minecraft.world.inventory.Slot;
 
 import java.util.List;
@@ -22,13 +22,13 @@ public interface IPlatformScreenHelper {
 
 	int getYSize(AbstractContainerScreen<?> containerScreen);
 
-	ImmutableRect2i getBookArea(RecipeUpdateListener containerScreen);
+	ImmutableRect2i getBookArea(AbstractRecipeBookScreen<?> screen);
 
 	ImmutableRect2i getToastsArea();
 
-	List<RecipeBookTabButton> getTabButtons(RecipeBookComponent recipeBookComponent);
+	List<RecipeBookTabButton> getTabButtons(RecipeBookComponent<?> recipeBookComponent);
 
 	boolean canLoseFocus(EditBox editBox);
 
-	RecipeBookComponent<?> getRecipeBookComponent(RecipeUpdateListener containerScreen);
+	RecipeBookComponent<?> getRecipeBookComponent(AbstractRecipeBookScreen<?> screen);
 }

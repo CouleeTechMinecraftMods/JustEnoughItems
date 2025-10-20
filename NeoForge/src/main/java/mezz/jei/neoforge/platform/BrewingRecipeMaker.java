@@ -18,7 +18,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -65,11 +64,17 @@ public class BrewingRecipeMaker {
 		Set<Class<?>> unhandledRecipeClasses = new HashSet<>();
 		for (IBrewingRecipe iBrewingRecipe : brewingRecipes) {
 			if (iBrewingRecipe instanceof BrewingRecipe brewingRecipe) {
-				ItemStack[] ingredients = brewingRecipe.getIngredient().getItems();
+				// In 1.21.2+, ingredient.items() returns HolderSet<Item> which needs to be mapped to ItemStacks
+				ItemStack[] ingredients = brewingRecipe.getIngredient().items().stream()
+					.map(net.minecraft.core.Holder::value)
+					.map(ItemStack::new)
+					.toArray(ItemStack[]::new);
 				if (ingredients.length > 0) {
 					Ingredient inputIngredient = brewingRecipe.getInput();
 					ItemStack output = brewingRecipe.getOutput();
-					List<ItemStack> inputs = Arrays.stream(inputIngredient.getItems())
+					List<ItemStack> inputs = inputIngredient.items().stream()
+						.map(net.minecraft.core.Holder::value)
+						.map(ItemStack::new)
 						.filter(i -> !i.isEmpty())
 						.toList();
 					if (!output.isEmpty() && !inputs.isEmpty()) {

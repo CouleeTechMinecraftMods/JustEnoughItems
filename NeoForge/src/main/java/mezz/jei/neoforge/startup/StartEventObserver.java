@@ -11,7 +11,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.neoforged.bus.api.Event;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
-import net.neoforged.neoforge.client.event.RecipesUpdatedEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import org.apache.logging.log4j.LogManager;
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * This class observes events and determines when it's the right time to start JEI.
  *
- * JEI needs to see both the {@link TagsUpdatedEvent} and {@link RecipesUpdatedEvent}
+ * JEI needs to see both the {@link TagsUpdatedEvent} and {@link ClientPlayerNetworkEvent.LoggingIn}
  * before it is ready to start.
  *
  * Depending on the configuration (Integrated server, vanilla server, modded server),
@@ -34,7 +33,7 @@ import java.util.stream.Collectors;
  */
 public class StartEventObserver implements ResourceManagerReloadListener {
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final Set<Class<? extends Event>> requiredEvents = Set.of(TagsUpdatedEvent.class, RecipesUpdatedEvent.class);
+	private static final Set<Class<? extends Event>> requiredEvents = Set.of(TagsUpdatedEvent.class, ClientPlayerNetworkEvent.LoggingIn.class);
 
 	private enum State {
 		LISTENING, JEI_STARTED

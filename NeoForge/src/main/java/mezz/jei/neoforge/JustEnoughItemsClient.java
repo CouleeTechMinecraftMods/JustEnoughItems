@@ -18,12 +18,14 @@ import mezz.jei.neoforge.network.NetworkHandler;
 import mezz.jei.neoforge.plugins.neoforge.NeoForgeGuiPlugin;
 import mezz.jei.neoforge.startup.ForgePluginFinder;
 import mezz.jei.neoforge.startup.StartEventObserver;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.client.event.RecipesReceivedEvent;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
@@ -63,8 +65,15 @@ public class JustEnoughItemsClient {
 			InternalKeyMappings keyMappings = new InternalKeyMappings(e::register);
 			Internal.setKeyMappings(keyMappings);
 		});
-		// In 1.21.2+, sync RecipeMap from server via RecipesReceivedEvent
-		subscriptions.register(RecipesReceivedEvent.class, e -> Internal.setClientSyncedRecipes(e.getRecipeMap()));
+		// In 1.21.2, RecipesReceivedEvent doesn't exist yet, get RecipeManager from connection when player joins
+		subscriptions.register(ClientPlayerNetworkEvent.LoggingIn.class, e -> {
+			Minecraft minecraft = Minecraft.getInstance();
+			ClientPacketListener connection = minecraft.getConnection();
+			if (connection != null) {
+				// connection.recipes() returns RecipeAccess which extends RecipeMap
+				Internal.setClientSyncedRecipes((net.minecraft.world.item.crafting.RecipeMap) connection.recipes());
+			}
+		});
 
 		IEventBus modEventBus = subscriptions.getModEventBus();
 		DeferredRegister<RecipeSerializer<?>> deferredRegister = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, ModIds.JEI_ID);

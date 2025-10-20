@@ -6,11 +6,11 @@ import mezz.jei.common.util.ImmutableRect2i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.toasts.Toast;
-import net.minecraft.client.gui.components.toasts.ToastComponent;
+import net.minecraft.client.gui.components.toasts.ToastManager;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.AbstractRecipeBookScreen;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookTabButton;
-import net.minecraft.client.gui.screens.recipebook.RecipeUpdateListener;
 import net.minecraft.world.inventory.Slot;
 
 import java.util.List;
@@ -44,9 +44,9 @@ public class ScreenHelper implements IPlatformScreenHelper {
 	}
 
 	@Override
-	public ImmutableRect2i getBookArea(RecipeUpdateListener containerScreen) {
-		RecipeBookComponent<?> guiRecipeBook = getRecipeBookComponent(containerScreen);
-		if (guiRecipeBook != null && guiRecipeBook.isVisible()) {
+	public ImmutableRect2i getBookArea(AbstractRecipeBookScreen<?> screen) {
+		RecipeBookComponent<?> guiRecipeBook = getRecipeBookComponent(screen);
+		if (guiRecipeBook.isVisible()) {
 			int i = (guiRecipeBook.width - 147) / 2 - guiRecipeBook.xOffset;
 			int j = (guiRecipeBook.height - 166) / 2;
 			return new ImmutableRect2i(i, j, 147, 166);
@@ -57,14 +57,14 @@ public class ScreenHelper implements IPlatformScreenHelper {
 	@Override
 	public ImmutableRect2i getToastsArea() {
 		Minecraft minecraft = Minecraft.getInstance();
-		ToastComponent toasts = minecraft.getToasts();
-		List<ToastComponent.ToastInstance<?>> visible = toasts.visible;
+		ToastManager toastManager = minecraft.getToastManager();
+		List<ToastManager.ToastInstance<?>> visible = toastManager.visibleToasts;
 		if (visible.isEmpty()) {
 			return ImmutableRect2i.EMPTY;
 		}
 		int height = 0;
 		int width = 0;
-		for (ToastComponent.ToastInstance<?> instance : visible) {
+		for (ToastManager.ToastInstance<?> instance : visible) {
 			Toast toast = instance.getToast();
 			height += toast.height();
 			width = Math.max(toast.width(), width);
@@ -75,7 +75,7 @@ public class ScreenHelper implements IPlatformScreenHelper {
 	}
 
 	@Override
-	public List<RecipeBookTabButton> getTabButtons(RecipeBookComponent recipeBookComponent) {
+	public List<RecipeBookTabButton> getTabButtons(RecipeBookComponent<?> recipeBookComponent) {
 		return recipeBookComponent.tabButtons;
 	}
 
@@ -85,19 +85,7 @@ public class ScreenHelper implements IPlatformScreenHelper {
 	}
 
 	@Override
-	public RecipeBookComponent<?> getRecipeBookComponent(RecipeUpdateListener containerScreen) {
-		// In 1.21.2+, need to access via reflection or cast - using accessor pattern
-		// RecipeUpdateListener should have recipeBookComponent field accessible
-		if (containerScreen instanceof AbstractContainerScreen<?> screen) {
-			try {
-				// Access the protected field via reflection
-				var field = AbstractContainerScreen.class.getDeclaredField("recipeBookComponent");
-				field.setAccessible(true);
-				return (RecipeBookComponent<?>) field.get(screen);
-			} catch (Exception e) {
-				return null;
-			}
-		}
-		return null;
+	public RecipeBookComponent<?> getRecipeBookComponent(AbstractRecipeBookScreen<?> screen) {
+		return screen.recipeBookComponent;
 	}
 }
