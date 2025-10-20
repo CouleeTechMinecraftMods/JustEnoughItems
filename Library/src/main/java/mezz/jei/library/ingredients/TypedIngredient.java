@@ -120,10 +120,12 @@ public final class TypedIngredient<T> implements ITypedIngredient<T> {
 	}
 
 	public static List<@Nullable ITypedIngredient<ItemStack>> createAndFilterInvalidList(IIngredientManager ingredientManager, Ingredient ingredient, boolean normalize) {
-		ItemStack[] itemStacks = ingredient.getItems();
+		List<ItemStack> itemStacks = ingredient.items().stream()
+			.map(holder -> new ItemStack(holder))
+			.toList();
 		IIngredientHelper<ItemStack> ingredientHelper = ingredientManager.getIngredientHelper(VanillaTypes.ITEM_STACK);
 
-		List<@Nullable ITypedIngredient<ItemStack>> results = new ArrayList<>(itemStacks.length);
+		List<@Nullable ITypedIngredient<ItemStack>> results = new ArrayList<>(itemStacks.size());
 		for (ItemStack itemStack : itemStacks) {
 			ITypedIngredient<ItemStack> result = createAndFilterInvalid(ingredientHelper, VanillaTypes.ITEM_STACK, itemStack, normalize);
 			results.add(result);

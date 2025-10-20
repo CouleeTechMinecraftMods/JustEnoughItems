@@ -20,7 +20,7 @@ public class OminousBottleSubtypeInterpreter implements ISubtypeInterpreter<Item
 
 	@Override
 	public String getLegacyStringSubtypeInfo(ItemStack itemStack, UidContext context) {
-		Integer amplifier = itemStack.get(DataComponents.OMINOUS_BOTTLE_AMPLIFIER);
+		Object amplifier = itemStack.get(DataComponents.OMINOUS_BOTTLE_AMPLIFIER);
 		if (amplifier == null) {
 			return "";
 		}

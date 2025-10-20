@@ -12,7 +12,7 @@ public final class FluidStackListFactory {
 	}
 
 	public static <T> List<T> create(Registry<Fluid> registry, IPlatformFluidHelper<T> helper) {
-		return registry.holders()
+		return registry.listElements()
 			.filter(holder -> {
 				Fluid fluid = holder.value();
 				return fluid.isSource(fluid.defaultFluidState());

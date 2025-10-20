@@ -109,16 +109,19 @@ public final class ItemStackBatchRenderer {
 		poseStack.scale(16.0F, -16.0F, 16.0F);
 
 		try {
-			itemRenderer.render(
-				itemStack,
-				ItemDisplayContext.GUI,
-				false,
-				poseStack,
-				guiGraphics.bufferSource(),
-				0xf000f0,
-				OverlayTexture.NO_OVERLAY,
-				bakedmodel
-			);
+			// In 1.21.2+, bufferSource() is replaced by drawSpecial()
+			guiGraphics.drawSpecial(bufferSource -> {
+				itemRenderer.render(
+					itemStack,
+					ItemDisplayContext.GUI,
+					false,
+					poseStack,
+					bufferSource,
+					0xf000f0,
+					OverlayTexture.NO_OVERLAY,
+					bakedmodel
+				);
+			});
 		} catch (Throwable throwable) {
 			CrashReport crashreport = CrashReport.forThrowable(throwable, "Rendering item");
 			CrashReportCategory crashreportcategory = crashreport.addCategory("Item being rendered");

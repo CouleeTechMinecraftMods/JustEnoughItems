@@ -155,7 +155,7 @@ public class CraftingGridHelper implements ICraftingGridHelper {
 
 	public static Map<Integer, Ingredient> getGuiSlotToIngredientMap(RecipeHolder<CraftingRecipe> recipeHolder, int width, int height) {
 		CraftingRecipe recipe = recipeHolder.value();
-		NonNullList<Ingredient> ingredients = recipe.getIngredients();
+		List<Ingredient> ingredients = recipe.placementInfo().ingredients();
 		if (width <= 0 || height <= 0) {
 			width = height = getShapelessSize(ingredients.size());
 		}
@@ -163,7 +163,8 @@ public class CraftingGridHelper implements ICraftingGridHelper {
 		Map<Integer, Ingredient> result = new LinkedHashMap<>(ingredients.size());
 		for (int i = 0; i < ingredients.size(); i++) {
 			Ingredient ingredient = ingredients.get(i);
-			if (!ingredient.isEmpty()) {
+			// In 1.21.2+, Ingredient.isEmpty() is replaced by checking items().isEmpty()
+			if (!ingredient.items().isEmpty()) {
 				int craftingIndex = CraftingGridHelper.getCraftingIndex(i, width, height);
 				result.put(craftingIndex, ingredient);
 			}

@@ -39,7 +39,7 @@ public record TagInfoRecipeMaker<B, I>(
 	private static <B, I> List<ITagInfoRecipe> createTagInfoRecipes(IIngredientType<I> ingredientType, ResourceKey<? extends Registry<B>> registryKey, Function<B, I> baseToIngredient, IIngredientManager ingredientManager) {
 		Registry<B> registry = RegistryUtil.getRegistry(registryKey);
 		return registry
-			.getTagNames()
+			.listTagIds()
 			.<ITagInfoRecipe>mapMulti((tagKey, acceptor) -> {
 				if (tagKey.location().getPath().equals(Tags.HIDDEN_FROM_RECIPE_VIEWERS.getPath())) {
 					return;

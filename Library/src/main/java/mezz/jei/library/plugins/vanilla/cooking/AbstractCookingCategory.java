@@ -43,7 +43,7 @@ public abstract class AbstractCookingCategory<T extends AbstractCookingRecipe> e
 
 		builder.addInputSlot(1, 1)
 			.setStandardSlotBackground()
-			.addIngredients(recipe.getIngredients().getFirst());
+			.addIngredients(recipe.placementInfo().ingredients().getFirst());
 
 		builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 1, 37)
 			.setStandardSlotBackground();
@@ -56,7 +56,8 @@ public abstract class AbstractCookingCategory<T extends AbstractCookingRecipe> e
 	@Override
 	public void createRecipeExtras(IRecipeExtrasBuilder builder, RecipeHolder<T> recipeHolder, IFocusGroup focuses) {
 		T recipe = recipeHolder.value();
-		int cookTime = recipe.getCookingTime();
+		// In 1.21.2+, getCookingTime() is replaced by cookingTime()
+		int cookTime = recipe.cookingTime();
 		if (cookTime <= 0) {
 			cookTime = regularCookTime;
 		}
@@ -71,7 +72,8 @@ public abstract class AbstractCookingCategory<T extends AbstractCookingRecipe> e
 
 	protected void addExperience(IRecipeExtrasBuilder builder, RecipeHolder<T> recipeHolder) {
 		T recipe = recipeHolder.value();
-		float experience = recipe.getExperience();
+		// In 1.21.2+, getExperience() is replaced by experience()
+		float experience = recipe.experience();
 		if (experience > 0) {
 			Component experienceString = Component.translatable("gui.jei.category.smelting.experience", experience);
 			builder.addText(experienceString, getWidth() - 20, 10)
@@ -83,7 +85,8 @@ public abstract class AbstractCookingCategory<T extends AbstractCookingRecipe> e
 
 	protected void addCookTime(IRecipeExtrasBuilder builder, RecipeHolder<T> recipeHolder) {
 		T recipe = recipeHolder.value();
-		int cookTime = recipe.getCookingTime();
+		// In 1.21.2+, getCookingTime() is replaced by cookingTime()
+		int cookTime = recipe.cookingTime();
 		if (cookTime <= 0) {
 			cookTime = regularCookTime;
 		}
@@ -106,7 +109,7 @@ public abstract class AbstractCookingCategory<T extends AbstractCookingRecipe> e
 
 	@Override
 	public ResourceLocation getRegistryName(RecipeHolder<T> recipe) {
-		return recipe.id();
+		return recipe.id().location();
 	}
 
 	@Override

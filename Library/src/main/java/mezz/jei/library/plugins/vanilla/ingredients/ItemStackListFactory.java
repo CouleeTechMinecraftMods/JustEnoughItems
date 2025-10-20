@@ -223,10 +223,10 @@ public final class ItemStackListFactory {
 		FeatureFlagSet features
 	) {
 		{
+			// In 1.21.2+, Registry uses stream() and filter by isEnabled()
 			List<ItemStack> itemStacks = RegistryUtil.getRegistry(Registries.ITEM)
-				.asLookup()
-				.filterFeatures(features)
-				.listElements()
+				.stream()
+				.filter(item -> item.isEnabled(features))
 				.map(ItemStack::new)
 				.filter(i -> !i.isEmpty())
 				.toList();
@@ -248,11 +248,10 @@ public final class ItemStackListFactory {
 		}
 
 		{
+			// In 1.21.2+, Registry uses stream() and filter by isEnabled()
 			List<ItemStack> itemStacks = RegistryUtil.getRegistry(Registries.BLOCK)
-				.asLookup()
-				.filterFeatures(features)
-				.listElements()
-				.map(Holder.Reference::value)
+				.stream()
+				.filter(block -> block.isEnabled(features))
 				.map(ItemStack::new)
 				.filter(i -> !i.isEmpty())
 				.toList();

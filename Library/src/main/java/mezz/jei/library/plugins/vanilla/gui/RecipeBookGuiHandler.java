@@ -21,9 +21,10 @@ public class RecipeBookGuiHandler<C extends AbstractContainerMenu, T extends Abs
 	 */
 	@Override
 	public List<Rect2i> getGuiExtraAreas(T containerScreen) {
-		RecipeBookComponent guiRecipeBook = containerScreen.getRecipeBookComponent();
-		if (guiRecipeBook.isVisible()) {
-			IPlatformScreenHelper screenHelper = Services.PLATFORM.getScreenHelper();
+		// In 1.21.2+, recipeBookComponent is a field, accessed via platform helper
+		IPlatformScreenHelper screenHelper = Services.PLATFORM.getScreenHelper();
+		RecipeBookComponent<?> guiRecipeBook = screenHelper.getRecipeBookComponent(containerScreen);
+		if (guiRecipeBook != null && guiRecipeBook.isVisible()) {
 			List<Rect2i> tabAreas = new ArrayList<>();
 			for (RecipeBookTabButton tab : screenHelper.getTabButtons(guiRecipeBook)) {
 				if (tab.visible) {

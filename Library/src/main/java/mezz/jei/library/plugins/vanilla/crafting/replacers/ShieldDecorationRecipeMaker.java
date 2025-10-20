@@ -6,6 +6,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BannerItem;
@@ -43,17 +44,15 @@ public final class ShieldDecorationRecipeMaker {
 	}
 
 	private static RecipeHolder<CraftingRecipe> createRecipe(BannerItem banner) {
-		NonNullList<Ingredient> inputs = NonNullList.of(
-			Ingredient.EMPTY,
-			Ingredient.of(Items.SHIELD),
-			Ingredient.of(banner)
-		);
+		NonNullList<Ingredient> inputs = NonNullList.create();
+		inputs.add(Ingredient.of(Items.SHIELD));
+		inputs.add(Ingredient.of(banner));
 
 		ItemStack output = createOutput(banner);
 
-		ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ModIds.MINECRAFT_ID, "jei.shield.decoration." + output.getDescriptionId());
+		ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ModIds.MINECRAFT_ID, "jei.shield.decoration." + output.getItem().getDescriptionId());
 		CraftingRecipe recipe = new ShapelessRecipe("jei.shield.decoration", CraftingBookCategory.MISC, output, inputs);
-		return new RecipeHolder<>(id, recipe);
+		return new RecipeHolder<>(ResourceKey.create(Registries.RECIPE, id), recipe);
 	}
 
 	private static ItemStack createOutput(BannerItem banner) {

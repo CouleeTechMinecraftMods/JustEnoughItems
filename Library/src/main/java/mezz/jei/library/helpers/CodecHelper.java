@@ -40,7 +40,11 @@ public class CodecHelper implements ICodecHelper {
 		Minecraft minecraft = Minecraft.getInstance();
 		ClientLevel level = minecraft.level;
 		assert level != null;
-		RecipeManager recipeManager = level.getRecipeManager();
+		// In 1.21.2+, ClientPacketListener#getRecipeManager -> recipes(), returns RecipeAccess
+		// But we can still access through the connection which has RecipeManager
+		var connection = minecraft.getConnection();
+		assert connection != null;
+		RecipeManager recipeManager = (RecipeManager) connection.recipes();
 
 		return Codec.either(
 			ResourceLocation.CODEC,

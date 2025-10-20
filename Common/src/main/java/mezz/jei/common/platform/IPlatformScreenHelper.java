@@ -29,4 +29,6 @@ public interface IPlatformScreenHelper {
 	List<RecipeBookTabButton> getTabButtons(RecipeBookComponent recipeBookComponent);
 
 	boolean canLoseFocus(EditBox editBox);
+
+	RecipeBookComponent<?> getRecipeBookComponent(RecipeUpdateListener containerScreen);
 }

@@ -139,9 +139,10 @@ public final class ColorGetter {
 
 	@Nullable
 	private static TextureAtlasSprite getTextureAtlasSprite(ItemStack itemStack) {
-		ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-		ItemModelShaper itemModelMesher = itemRenderer.getItemModelShaper();
-		BakedModel itemModel = itemModelMesher.getItemModel(itemStack);
+		Minecraft minecraft = Minecraft.getInstance();
+		ItemRenderer itemRenderer = minecraft.getItemRenderer();
+		// In 1.21.2+, getItemModelShaper() is removed, use getModel() directly
+		BakedModel itemModel = itemRenderer.getModel(itemStack, minecraft.level, null, 0);
 		IPlatformRenderHelper renderHelper = Services.PLATFORM.getRenderHelper();
 		TextureAtlasSprite particleTexture = renderHelper.getParticleIcon(itemModel);
 		if (particleTexture.atlasLocation().equals(MissingTextureAtlasSprite.getLocation())) {

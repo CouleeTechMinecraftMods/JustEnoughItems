@@ -6,7 +6,9 @@ import mezz.jei.common.platform.IPlatformRenderHelper;
 import mezz.jei.common.platform.IPlatformScreenHelper;
 import mezz.jei.common.platform.Services;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+// FIXME MC 1.21.2: EffectRenderingInventoryScreen was removed, replaced with EffectsInInventory helper
+// import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -17,13 +19,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public final class InventoryEffectRendererGuiHandler<T extends AbstractContainerMenu> implements IGuiContainerHandler<EffectRenderingInventoryScreen<T>> {
+// FIXME MC 1.21.2: This handler needs to be rewritten to work with AbstractContainerScreen
+// and detect screens that use EffectsInInventory helper instead of the removed EffectRenderingInventoryScreen base class
+public final class InventoryEffectRendererGuiHandler<T extends AbstractContainerMenu> implements IGuiContainerHandler<AbstractContainerScreen<T>> {
 	/**
 	 * Modeled after {@link DisplayEffectsScreen#drawActivePotionEffects()}
 	 */
 	@SuppressWarnings("JavadocReference")
 	@Override
-	public List<Rect2i> getGuiExtraAreas(EffectRenderingInventoryScreen<T> containerScreen) {
+	public List<Rect2i> getGuiExtraAreas(AbstractContainerScreen<T> containerScreen) {
 		if (!Internal.getJeiFeatures().getInventoryEffectRendererGuiHandlerEnabled()) {
 			return List.of();
 		}

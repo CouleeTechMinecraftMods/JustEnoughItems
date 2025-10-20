@@ -23,13 +23,13 @@ public class CraftingCategoryExtension implements ICraftingCategoryExtension<Cra
 		int width = getWidth(recipeHolder);
 		int height = getHeight(recipeHolder);
 		craftingGridHelper.createAndSetOutputs(builder, List.of(resultItem));
-		craftingGridHelper.createAndSetIngredients(builder, recipe.getIngredients(), width, height);
+		craftingGridHelper.createAndSetIngredients(builder, recipe.placementInfo().ingredients(), width, height);
 	}
 
 	@SuppressWarnings("removal")
 	@Override
 	public Optional<ResourceLocation> getRegistryName(RecipeHolder<CraftingRecipe> recipeHolder) {
-		return Optional.of(recipeHolder.id());
+		return Optional.of(recipeHolder.id().location());
 	}
 
 	@Override

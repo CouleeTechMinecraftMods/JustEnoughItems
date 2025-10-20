@@ -4,6 +4,8 @@ import mezz.jei.api.constants.ModIds;
 import mezz.jei.common.platform.IPlatformIngredientHelper;
 import mezz.jei.common.platform.Services;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
@@ -32,12 +34,14 @@ public final class ShulkerBoxColoringRecipeMaker {
 	private static RecipeHolder<CraftingRecipe> createRecipe(DyeColor color, Ingredient baseShulkerIngredient) {
 		IPlatformIngredientHelper ingredientHelper = Services.PLATFORM.getIngredientHelper();
 		Ingredient colorIngredient = ingredientHelper.createShulkerDyeIngredient(color);
-		NonNullList<Ingredient> inputs = NonNullList.of(Ingredient.EMPTY, baseShulkerIngredient, colorIngredient);
+		NonNullList<Ingredient> inputs = NonNullList.create();
+		inputs.add(baseShulkerIngredient);
+		inputs.add(colorIngredient);
 		Block coloredShulkerBox = ShulkerBoxBlock.getBlockByColor(color);
 		ItemStack output = new ItemStack(coloredShulkerBox);
-		ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ModIds.MINECRAFT_ID, group + "." + output.getDescriptionId());
+		ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ModIds.MINECRAFT_ID, group + "." + output.getItem().getDescriptionId());
 		CraftingRecipe recipe = new ShapelessRecipe(group, CraftingBookCategory.MISC, output, inputs);
-		return new RecipeHolder<>(id, recipe);
+		return new RecipeHolder<>(ResourceKey.create(Registries.RECIPE, id), recipe);
 	}
 
 	private ShulkerBoxColoringRecipeMaker() {

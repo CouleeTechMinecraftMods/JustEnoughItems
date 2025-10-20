@@ -110,7 +110,7 @@ public class CraftingRecipeCategory extends AbstractRecipeCategory<RecipeHolder<
 		ErrorUtil.checkNotNull(recipeHolder, "recipeHolder");
 		return this.extendableHelper.getOptionalRecipeExtension(recipeHolder)
 			.flatMap(extension -> extension.getRegistryName(recipeHolder))
-			.orElseGet(recipeHolder::id);
+			.orElseGet(() -> recipeHolder.id().location());
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import mezz.jei.api.recipe.vanilla.IVanillaRecipeFactory;
 import mezz.jei.common.util.RegistryUtil;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -24,18 +25,17 @@ public final class TippedArrowRecipeMaker {
 		IVanillaRecipeFactory vanillaRecipeFactory = jeiHelpers.getVanillaRecipeFactory();
 
 		String group = "jei.tipped.arrow";
-		ItemStack arrowStack = new ItemStack(Items.ARROW);
-		Ingredient arrowIngredient = Ingredient.of(arrowStack);
+		Ingredient arrowIngredient = Ingredient.of(Items.ARROW);
 
 		Registry<Potion> potionRegistry = RegistryUtil.getRegistry(Registries.POTION);
-		return potionRegistry.holders()
+		return potionRegistry.listElements()
 			.map(potion -> {
 				ItemStack input = PotionContents.createItemStack(Items.LINGERING_POTION, potion);
 				ItemStack output = PotionContents.createItemStack(Items.TIPPED_ARROW, potion);
 				output.setCount(8);
 
-				Ingredient potionIngredient = Ingredient.of(input);
-				ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ModIds.MINECRAFT_ID, "jei.tipped.arrow." + output.getDescriptionId());
+				Ingredient potionIngredient = Ingredient.of(input.getItem());
+				ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ModIds.MINECRAFT_ID, "jei.tipped.arrow." + output.getItem().getDescriptionId());
 				CraftingRecipe recipe = vanillaRecipeFactory.createShapedRecipeBuilder(CraftingBookCategory.MISC, List.of(output))
 					.group(group)
 					.define('a', arrowIngredient)
@@ -44,7 +44,7 @@ public final class TippedArrowRecipeMaker {
 					.pattern("apa")
 					.pattern("aaa")
 					.build();
-				return new RecipeHolder<>(id, recipe);
+				return new RecipeHolder<>(ResourceKey.create(Registries.RECIPE, id), recipe);
 			})
 			.toList();
 	}

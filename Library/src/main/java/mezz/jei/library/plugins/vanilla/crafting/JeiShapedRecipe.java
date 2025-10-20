@@ -7,17 +7,20 @@ import mezz.jei.library.recipes.RecipeSerializers;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
+import java.util.Optional;
 
 public class JeiShapedRecipe implements CraftingRecipe {
 	private final ShapedRecipePattern pattern;
@@ -33,36 +36,41 @@ public class JeiShapedRecipe implements CraftingRecipe {
 	}
 
 	@Override
-	public RecipeSerializer<?> getSerializer() {
-		return RecipeSerializers.getJeiShapedRecipeSerializer();
+	@SuppressWarnings("unchecked")
+	public RecipeSerializer<? extends CraftingRecipe> getSerializer() {
+		return (RecipeSerializer<? extends CraftingRecipe>) RecipeSerializers.getJeiShapedRecipeSerializer();
 	}
 
-	@Override
 	public String getGroup() {
 		return this.group;
 	}
 
-	@Override
 	public CraftingBookCategory category() {
 		return this.category;
 	}
 
-	@Override
 	public ItemStack getResultItem(HolderLookup.Provider registries) {
 		return this.results.getFirst();
 	}
 
-	@Override
 	public NonNullList<Ingredient> getIngredients() {
-		return this.pattern.ingredients();
+		List<Optional<Ingredient>> ingredients = this.pattern.ingredients();
+		NonNullList<Ingredient> result = NonNullList.create();
+		for (Optional<Ingredient> optional : ingredients) {
+			result.add(optional.orElse(Ingredient.of()));
+		}
+		return result;
 	}
 
 	@Override
+	public PlacementInfo placementInfo() {
+		return PlacementInfo.NOT_PLACEABLE;
+	}
+
 	public boolean showNotification() {
 		return false;
 	}
 
-	@Override
 	public boolean canCraftInDimensions(int width, int height) {
 		return width >= this.pattern.width() && height >= this.pattern.height();
 	}
@@ -85,13 +93,12 @@ public class JeiShapedRecipe implements CraftingRecipe {
 		return this.pattern.height();
 	}
 
-	@Override
 	public boolean isIncomplete() {
 		NonNullList<Ingredient> nonNullList = this.getIngredients();
 		return nonNullList.isEmpty() || nonNullList.stream().filter((ingredient) -> {
-			return !ingredient.isEmpty();
+			return !ingredient.items().isEmpty();
 		}).anyMatch((ingredient) -> {
-			return ingredient.getItems().length == 0;
+			return ingredient.items().isEmpty();
 		});
 	}
 
@@ -124,7 +131,7 @@ public class JeiShapedRecipe implements CraftingRecipe {
 			String string = buffer.readUtf();
 			CraftingBookCategory craftingBookCategory = buffer.readEnum(CraftingBookCategory.class);
 			ShapedRecipePattern shapedRecipePattern = ShapedRecipePattern.STREAM_CODEC.decode(buffer);
-			List<ItemStack> results = ItemStack.LIST_STREAM_CODEC.decode(buffer);
+			List<ItemStack> results = ItemStack.OPTIONAL_LIST_STREAM_CODEC.decode(buffer);
 			return new JeiShapedRecipe(string, craftingBookCategory, shapedRecipePattern, results);
 		}
 
@@ -132,7 +139,7 @@ public class JeiShapedRecipe implements CraftingRecipe {
 			buffer.writeUtf(recipe.group);
 			buffer.writeEnum(recipe.category);
 			ShapedRecipePattern.STREAM_CODEC.encode(buffer, recipe.pattern);
-			ItemStack.LIST_STREAM_CODEC.encode(buffer, recipe.results);
+			ItemStack.OPTIONAL_LIST_STREAM_CODEC.encode(buffer, recipe.results);
 		}
 	}
 }

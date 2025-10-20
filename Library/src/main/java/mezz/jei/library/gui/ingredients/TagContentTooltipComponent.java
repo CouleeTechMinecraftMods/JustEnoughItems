@@ -25,8 +25,7 @@ public class TagContentTooltipComponent<T> implements ClientTooltipComponent, To
 		this.ingredients = ingredients;
 	}
 
-	@Override
-	public void renderImage(Font font, int x, int y, GuiGraphics guiGraphics) {
+	public void renderImage(Font font, int x, int y, int lineHeight, GuiGraphics guiGraphics) {
 		if (ingredients.size() <= MAX_INGREDIENTS) {
 			drawIngredients(guiGraphics, x, y, ingredients.size());
 		} else {
@@ -75,7 +74,7 @@ public class TagContentTooltipComponent<T> implements ClientTooltipComponent, To
 	}
 
 	@Override
-	public int getHeight() {
+	public int getHeight(Font font) {
 		return getLineCount() * INGREDIENT_SIZE + (2 * INGREDIENT_PADDING);
 	}
 

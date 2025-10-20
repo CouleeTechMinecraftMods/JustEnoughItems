@@ -20,7 +20,7 @@ public class CampfireCookingCategory extends AbstractCookingCategory<CampfireCoo
 		CampfireCookingRecipe recipe = recipeHolder.value();
 		builder.addInputSlot(1, 1)
 			.setStandardSlotBackground()
-			.addIngredients(recipe.getIngredients().getFirst());
+			.addIngredients(recipe.placementInfo().ingredients().getFirst());
 
 		builder.addOutputSlot(61, 9)
 			.setOutputSlotBackground()
@@ -30,7 +30,8 @@ public class CampfireCookingCategory extends AbstractCookingCategory<CampfireCoo
 	@Override
 	public void createRecipeExtras(IRecipeExtrasBuilder builder, RecipeHolder<CampfireCookingRecipe> recipeHolder, IFocusGroup focuses) {
 		CampfireCookingRecipe recipe = recipeHolder.value();
-		int cookTime = recipe.getCookingTime();
+		// In 1.21.2+, getCookingTime() is replaced by cookingTime()
+		int cookTime = recipe.cookingTime();
 		if (cookTime <= 0) {
 			cookTime = regularCookTime;
 		}

@@ -48,6 +48,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -223,8 +224,8 @@ public class JeiDebugPlugin implements IModPlugin {
 			));
 
 			RecipeHolder<SmithingRecipe> testRecipeWithoutTemplate = new RecipeHolder<>(
-				ResourceLocation.fromNamespaceAndPath(ModIds.JEI_ID, "test_recipe_without_template"),
-				new SmithingTrimRecipe(Ingredient.EMPTY, Ingredient.of(new ItemStack(Items.APPLE)), Ingredient.of(new ItemStack(Items.BAKED_POTATO)))
+				ResourceKey.create(Registries.RECIPE, ResourceLocation.fromNamespaceAndPath(ModIds.JEI_ID, "test_recipe_without_template")),
+				new SmithingTrimRecipe(Optional.empty(), Optional.of(Ingredient.of(Items.APPLE)), Optional.of(Ingredient.of(Items.BAKED_POTATO)))
 			);
 			registration.addRecipes(RecipeTypes.SMITHING, List.of(
 				testRecipeWithoutTemplate
@@ -332,7 +333,7 @@ public class JeiDebugPlugin implements IModPlugin {
 		if (DebugConfig.isDebugModeEnabled()) {
 			ErrorUtil.assertMainThread();
 			Registry<Enchantment> registry = RegistryUtil.getRegistry(Registries.ENCHANTMENT);
-			Enchantment enchantment = registry.get(Enchantments.FIRE_ASPECT);
+			Enchantment enchantment = registry.get(Enchantments.FIRE_ASPECT).orElseThrow().value();
 			assert enchantment != null;
 			if (debugRecipeCategory != null) {
 				debugRecipeCategory.setRuntime(jeiRuntime);

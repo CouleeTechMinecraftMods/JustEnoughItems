@@ -253,6 +253,8 @@ public class ItemStackHelper implements IIngredientHelper<ItemStack> {
 	@Override
 	public Optional<TagKey<?>> getTagKeyEquivalent(Collection<ItemStack> ingredients) {
 		Registry<Item> itemRegistry = RegistryUtil.getRegistry(Registries.ITEM);
-		return TagUtil.getTagEquivalent(ingredients, ItemStack::getItem, itemRegistry::getTags);
+		// In 1.21.2+, Registry::getTags returns Stream<Named>, need to map to Stream<Pair<TagKey, Named>>
+		return TagUtil.getTagEquivalent(ingredients, ItemStack::getItem,
+			() -> itemRegistry.getTags().map(named -> com.mojang.datafixers.util.Pair.of(named.key(), named)));
 	}
 }

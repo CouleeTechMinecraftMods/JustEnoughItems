@@ -48,8 +48,10 @@ public final class CategoryRecipeValidator<T extends Recipe<?>> {
 			}
 			return false;
 		}
-		List<Ingredient> ingredients = recipe.getIngredients();
-		if (ingredients == null) {
+		// In 1.21.2+, getIngredients() -> placementInfo().ingredients()
+		var placementInfo = recipe.placementInfo();
+		List<Ingredient> ingredients = placementInfo.ingredients();
+		if (ingredients.isEmpty()) {
 			if (LOGGER.isDebugEnabled()) {
 				String recipeInfo = RecipeErrorUtil.getInfoFromRecipe(recipeHolder, recipeCategory, ingredientManager);
 				LOGGER.debug("Skipping Recipe because it has no input Ingredients. {}", recipeInfo);
@@ -83,8 +85,9 @@ public final class CategoryRecipeValidator<T extends Recipe<?>> {
 	private static int getInputCount(List<Ingredient> ingredientList) {
 		int inputCount = 0;
 		for (Ingredient ingredient : ingredientList) {
-			ItemStack[] input = ingredient.getItems();
-			if (input == null) {
+			// In 1.21.2+, ingredient.getItems() -> ingredient.items().toArray(ItemStack[]::new)
+			ItemStack[] input = ingredient.items().toArray(ItemStack[]::new);
+			if (input == null || input.length == 0) {
 				return INVALID_COUNT;
 			} else {
 				inputCount++;

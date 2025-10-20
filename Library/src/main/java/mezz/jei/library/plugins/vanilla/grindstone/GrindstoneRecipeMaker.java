@@ -45,7 +45,7 @@ public final class GrindstoneRecipeMaker {
 			IPlatformRecipeHelper platformHelper
 	) {
 		Registry<Enchantment> registry = RegistryUtil.getRegistry(Registries.ENCHANTMENT);
-		List<Holder.Reference<Enchantment>> enchantments = registry.holders().toList();
+		List<Holder.Reference<Enchantment>> enchantments = registry.listElements().toList();
 		List<IJeiGrindstoneRecipe> grindstoneRecipes = new ArrayList<>();
 		for (ItemStack stack : ingredientManager.getAllItemStacks()) {
 			if (!stack.isEnchantable()) {

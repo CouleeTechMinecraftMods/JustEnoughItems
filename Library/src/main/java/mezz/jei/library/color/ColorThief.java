@@ -97,7 +97,8 @@ public class ColorThief {
 		while (i < pixelCount) {
 			int x = i % width;
 			int y = i / width;
-			int rgba = sourceImage.getPixelRGBA(x, y);
+			// In 1.21.2+, getPixelRGBA() is replaced by getPixel()
+			int rgba = sourceImage.getPixel(x, y);
 			int a = rgba >> 24 & 255;
 			int b = rgba >> 16 & 255;
 			int g = rgba >> 8 & 255;

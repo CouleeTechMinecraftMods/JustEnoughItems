@@ -100,7 +100,7 @@ public class SmithingRecipeCategory extends AbstractRecipeCategory<RecipeHolder<
 
 	@Override
 	public ResourceLocation getRegistryName(RecipeHolder<SmithingRecipe> recipe) {
-		return recipe.id();
+		return recipe.id().location();
 	}
 
 	@Override

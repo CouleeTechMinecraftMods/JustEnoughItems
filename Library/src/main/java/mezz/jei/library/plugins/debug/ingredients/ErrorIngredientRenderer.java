@@ -38,12 +38,14 @@ public class ErrorIngredientRenderer implements IIngredientRenderer<ErrorIngredi
 		Minecraft minecraft = Minecraft.getInstance();
 		switch (ingredient.crashType()) {
 			case RenderBreakVertexBufferCrash -> {
-				MultiBufferSource.BufferSource bufferSource = guiGraphics.bufferSource();
-				for (RenderType renderType : RENDER_TYPES) {
-					VertexConsumer buffer = bufferSource.getBuffer(renderType);
-					buffer.addVertex(0, 0, 0)
-						.setColor(100);
-				}
+				// In 1.21.2+, bufferSource() is replaced by drawSpecial()
+				guiGraphics.drawSpecial(bufferSource -> {
+					for (RenderType renderType : RENDER_TYPES) {
+						VertexConsumer buffer = bufferSource.getBuffer(renderType);
+						buffer.addVertex(0, 0, 0)
+							.setColor(100);
+					}
+				});
 				throw new RuntimeException("intentional render crash for testing");
 			}
 			case TooltipCrash -> {

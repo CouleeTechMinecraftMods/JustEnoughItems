@@ -43,20 +43,27 @@ public abstract class SmithingCategoryExtension<R extends SmithingRecipe> implem
 		Ingredient baseIngredient = recipeHelper.getBase(recipe);
 		Ingredient additionIngredient = recipeHelper.getAddition(recipe);
 
-		List<ItemStack> templateStacks = Arrays.asList(templateIngredient.getItems());
+		// In 1.21.2+, Ingredient.items() returns HolderSet<Item> which needs to be mapped to ItemStacks
+		List<ItemStack> templateStacks = templateIngredient.items().stream()
+			.map(ItemStack::new)
+			.toList();
 		if (templateStacks.isEmpty()) {
 			templateStacks = List.of(ItemStack.EMPTY);
 		}
 
-		List<ItemStack> baseStacks = Arrays.asList(baseIngredient.getItems());
+		List<ItemStack> baseStacks = baseIngredient.items().stream()
+			.map(ItemStack::new)
+			.toList();
 		if (baseStacks.isEmpty()) {
 			baseStacks = List.of(ItemStack.EMPTY);
 		}
 
 		ItemStack addition = ItemStack.EMPTY;
-		ItemStack[] additions = additionIngredient.getItems();
-		if (additions.length > 0) {
-			addition = additions[0];
+		List<ItemStack> additions = additionIngredient.items().stream()
+			.map(ItemStack::new)
+			.toList();
+		if (!additions.isEmpty()) {
+			addition = additions.get(0);
 		}
 
 		for (ItemStack template : templateStacks) {

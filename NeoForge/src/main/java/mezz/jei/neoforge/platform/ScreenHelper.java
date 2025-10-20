@@ -45,8 +45,8 @@ public class ScreenHelper implements IPlatformScreenHelper {
 
 	@Override
 	public ImmutableRect2i getBookArea(RecipeUpdateListener containerScreen) {
-		RecipeBookComponent guiRecipeBook = containerScreen.getRecipeBookComponent();
-		if (guiRecipeBook.isVisible()) {
+		RecipeBookComponent<?> guiRecipeBook = getRecipeBookComponent(containerScreen);
+		if (guiRecipeBook != null && guiRecipeBook.isVisible()) {
 			int i = (guiRecipeBook.width - 147) / 2 - guiRecipeBook.xOffset;
 			int j = (guiRecipeBook.height - 166) / 2;
 			return new ImmutableRect2i(i, j, 147, 166);
@@ -82,5 +82,22 @@ public class ScreenHelper implements IPlatformScreenHelper {
 	@Override
 	public boolean canLoseFocus(EditBox editBox) {
 		return editBox.canLoseFocus;
+	}
+
+	@Override
+	public RecipeBookComponent<?> getRecipeBookComponent(RecipeUpdateListener containerScreen) {
+		// In 1.21.2+, need to access via reflection or cast - using accessor pattern
+		// RecipeUpdateListener should have recipeBookComponent field accessible
+		if (containerScreen instanceof AbstractContainerScreen<?> screen) {
+			try {
+				// Access the protected field via reflection
+				var field = AbstractContainerScreen.class.getDeclaredField("recipeBookComponent");
+				field.setAccessible(true);
+				return (RecipeBookComponent<?>) field.get(screen);
+			} catch (Exception e) {
+				return null;
+			}
+		}
+		return null;
 	}
 }

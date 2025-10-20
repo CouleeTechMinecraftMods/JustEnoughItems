@@ -34,9 +34,10 @@ public class StoneCuttingRecipeCategory extends AbstractRecipeCategory<RecipeHol
 	public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<StonecutterRecipe> recipeHolder, IFocusGroup focuses) {
 		StonecutterRecipe recipe = recipeHolder.value();
 
+		// In 1.21.2+, getIngredients() -> placementInfo().ingredients()
 		builder.addInputSlot(1, 9)
 			.setStandardSlotBackground()
-			.addIngredients(recipe.getIngredients().getFirst());
+			.addIngredients(recipe.placementInfo().ingredients().getFirst());
 
 		builder.addOutputSlot(61,  9)
 			.setOutputSlotBackground()
@@ -56,7 +57,7 @@ public class StoneCuttingRecipeCategory extends AbstractRecipeCategory<RecipeHol
 
 	@Override
 	public ResourceLocation getRegistryName(RecipeHolder<StonecutterRecipe> recipe) {
-		return recipe.id();
+		return recipe.id().location();
 	}
 
 	@Override

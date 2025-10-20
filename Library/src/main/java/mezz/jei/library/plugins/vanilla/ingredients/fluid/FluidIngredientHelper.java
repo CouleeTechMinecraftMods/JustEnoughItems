@@ -154,8 +154,9 @@ public class FluidIngredientHelper<T> implements IIngredientHelper<T> {
 	public Stream<ResourceLocation> getTagStream(T ingredient) {
 		Fluid fluid = fluidType.getBase(ingredient);
 
+		// In 1.21.2+, Registry::getHolder takes ResourceKey directly
 		return registry.getResourceKey(fluid)
-			.flatMap(registry::getHolder)
+			.flatMap(resourceKey -> registry.get(resourceKey))
 			.map(Holder::tags)
 			.orElse(Stream.of())
 			.map(TagKey::location);
@@ -164,8 +165,9 @@ public class FluidIngredientHelper<T> implements IIngredientHelper<T> {
 	@Override
 	public boolean isHiddenFromRecipeViewersByTags(T ingredient) {
 		Fluid fluid = fluidType.getBase(ingredient);
+		// In 1.21.2+, Registry::getHolder takes ResourceKey directly
 		return registry.getResourceKey(fluid)
-			.flatMap(registry::getHolder)
+			.flatMap(resourceKey -> registry.get(resourceKey))
 			.map(holder -> holder.is(hiddenFromRecipeViewers))
 			.orElse(false);
 	}
@@ -198,7 +200,9 @@ public class FluidIngredientHelper<T> implements IIngredientHelper<T> {
 	@Override
 	public Optional<TagKey<?>> getTagKeyEquivalent(Collection<T> ingredients) {
 		Registry<Fluid> fluidRegistry = RegistryUtil.getRegistry(Registries.FLUID);
-		return TagUtil.getTagEquivalent(ingredients, fluidType::getBase, fluidRegistry::getTags);
+		// In 1.21.2+, Registry::getTags returns Stream<Named>, need to map to Stream<Pair<TagKey, Named>>
+		return TagUtil.getTagEquivalent(ingredients, fluidType::getBase,
+			() -> fluidRegistry.getTags().map(named -> com.mojang.datafixers.util.Pair.of(named.key(), named)));
 	}
 
 	@Override
