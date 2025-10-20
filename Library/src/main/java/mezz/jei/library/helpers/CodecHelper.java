@@ -22,6 +22,8 @@ import mezz.jei.common.codecs.TupleCodec;
 import mezz.jei.common.codecs.TypedIngredientCodecs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -50,25 +52,28 @@ public class CodecHelper implements ICodecHelper {
 		.flatXmap(
 			either -> {
 				return either.map(
-					recipeHolderId -> {
-						return recipeManager.byKey(recipeHolderId)
+					recipeLocationId -> {
+						ResourceKey<Recipe<?>> recipeKey = ResourceKey.create(Registries.RECIPE, recipeLocationId);
+						return recipeManager.byKey(recipeKey)
 							.map(DataResult::success)
-							.orElseGet(() -> DataResult.error(() -> "Could not find recipe for key: " + recipeHolderId));
+							.orElseGet(() -> DataResult.error(() -> "Could not find recipe for key: " + recipeLocationId));
 					},
 					pair -> {
-						ResourceLocation recipeHolderId = pair.getFirst();
+						ResourceLocation recipeLocationId = pair.getFirst();
 						Recipe<?> recipe = pair.getSecond();
 						if (recipe == null) {
-							return DataResult.error(() -> "Could not find recipe for key: " + recipeHolderId);
+							return DataResult.error(() -> "Could not find recipe for key: " + recipeLocationId);
 						}
-						RecipeHolder<?> recipeHolder = new RecipeHolder<>(recipeHolderId, recipe);
+						ResourceKey<Recipe<?>> recipeKey = ResourceKey.create(Registries.RECIPE, recipeLocationId);
+						RecipeHolder<?> recipeHolder = new RecipeHolder<>(recipeKey, recipe);
 						return DataResult.success(recipeHolder);
 					}
 				);
 			},
 			recipeHolder -> {
-				ResourceLocation recipeHolderId = recipeHolder.id();
-				Optional<RecipeHolder<?>> found = recipeManager.byKey(recipeHolderId);
+				ResourceLocation recipeHolderId = recipeHolder.id().location();
+				ResourceKey<Recipe<?>> recipeKey = recipeHolder.id();
+				Optional<RecipeHolder<?>> found = recipeManager.byKey(recipeKey);
 				if (found.isPresent() && found.get().equals(recipeHolder)) {
 					return DataResult.success(Either.left(recipeHolderId));
 				}

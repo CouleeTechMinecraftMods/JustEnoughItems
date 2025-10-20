@@ -61,7 +61,6 @@ public class DrawableResource implements IDrawableStatic {
 
 	@Override
 	public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset, int maskTop, int maskBottom, int maskLeft, int maskRight) {
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderTexture(0, this.resourceLocation);
 
 		int x = xOffset + this.paddingLeft + maskLeft;

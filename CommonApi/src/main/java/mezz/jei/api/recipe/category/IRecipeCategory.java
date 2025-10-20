@@ -268,7 +268,7 @@ public interface IRecipeCategory<T> {
 	@Nullable
 	default ResourceLocation getRegistryName(T recipe) {
 		if (recipe instanceof RecipeHolder<?> recipeHolder) {
-			return recipeHolder.id();
+			return recipeHolder.id().location();
 		}
 		return null;
 	}

@@ -56,7 +56,10 @@ public interface IIngredientConsumer {
 	 * @since 19.8.3
 	 */
 	default IIngredientConsumer addIngredients(Ingredient ingredient) {
-		return addIngredients(VanillaTypes.ITEM_STACK, List.of(ingredient.getItems()));
+		var items = ingredient.items().stream()
+			.map(holder -> new net.minecraft.world.item.ItemStack(holder))
+			.toList();
+		return addIngredients(VanillaTypes.ITEM_STACK, items);
 	}
 
 	/**

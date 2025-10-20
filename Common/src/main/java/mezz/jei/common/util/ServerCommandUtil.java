@@ -42,7 +42,7 @@ public final class ServerCommandUtil {
 			return true;
 		}
 
-		CommandSourceStack commandSource = sender.createCommandSourceStack();
+		CommandSourceStack commandSource = ((net.minecraft.server.level.ServerPlayer)sender).createCommandSourceStack();
 		if (serverConfig.isCheatModeEnabledForOp()) {
 			MinecraftServer minecraftServer = sender.getServer();
 			if (minecraftServer != null) {
@@ -193,7 +193,7 @@ public final class ServerCommandUtil {
 		if (player.getServer() == null) {
 			return;
 		}
-		CommandSourceStack commandSource = player.createCommandSourceStack();
+		CommandSourceStack commandSource = ((net.minecraft.server.level.ServerPlayer)player).createCommandSourceStack();
 		int count = stack.getCount();
 		Component stackTextComponent = stack.getDisplayName();
 		Component displayName = player.getDisplayName();

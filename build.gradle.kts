@@ -104,6 +104,7 @@ subprojects {
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
         options.release.set(JavaLanguageVersion.of(modJavaVersion).asInt())
+        options.compilerArgs.addAll(listOf("-Xmaxerrs", "1000", "-Xmaxwarns", "1000"))
     }
 
     tasks.withType<Jar> {

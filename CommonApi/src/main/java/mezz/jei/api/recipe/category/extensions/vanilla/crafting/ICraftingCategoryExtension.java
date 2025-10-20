@@ -84,7 +84,7 @@ public interface ICraftingCategoryExtension<R extends CraftingRecipe> extends IR
 	@Deprecated(since = "19.4.1", forRemoval = true)
 	default Optional<ResourceLocation> getRegistryName(RecipeHolder<R> recipeHolder) {
 		return Optional.ofNullable(getRegistryName())
-			.or(() -> Optional.of(recipeHolder.id()));
+			.or(() -> Optional.of(recipeHolder.id().location()));
 	}
 
 	/**

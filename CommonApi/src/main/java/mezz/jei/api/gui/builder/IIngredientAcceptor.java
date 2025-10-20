@@ -54,7 +54,10 @@ public interface IIngredientAcceptor<THIS extends IIngredientAcceptor<THIS>> ext
 	 * @since 9.3.0
 	 */
 	default THIS addIngredients(Ingredient ingredient) {
-		return addIngredients(VanillaTypes.ITEM_STACK, List.of(ingredient.getItems()));
+		var items = ingredient.items().stream()
+			.map(holder -> new net.minecraft.world.item.ItemStack(holder))
+			.toList();
+		return addIngredients(VanillaTypes.ITEM_STACK, items);
 	}
 
 	/**

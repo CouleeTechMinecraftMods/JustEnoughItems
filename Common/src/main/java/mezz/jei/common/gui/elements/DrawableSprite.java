@@ -63,7 +63,6 @@ public class DrawableSprite implements IDrawableStatic {
 		int textureWidth = this.width;
 		int textureHeight = this.height;
 
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderTexture(0, Constants.LOCATION_JEI_GUI_TEXTURE_ATLAS);
 
 		maskTop += trimTop;
