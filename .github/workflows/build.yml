@@ -35,6 +35,14 @@ jobs:
           ./gradlew :CommonApi:build --no-daemon
           ./gradlew :FabricApi:build --no-daemon
           ./gradlew :NeoForgeApi:build --no-daemon
+          ./gradlew :Gui:build --no-daemon
+          ./gradlew :Library:build --no-daemon
+
+      - name: Run tests
+        run: |
+          ./gradlew :Core:test --no-daemon
+          ./gradlew :NeoForge:test --no-daemon
+          ./gradlew :Common:test --no-daemon
 
       - name: Copy together artifacts
         shell: bash
